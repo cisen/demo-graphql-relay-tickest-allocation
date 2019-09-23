@@ -1,11 +1,11 @@
 import { decoABC, encoABC } from './utils';
 
 export function buildDefaultSeats() {
-  let defaultSeatsMap = new Map();
+  let defaultSeats = [];
 
   // 50-100
   for (let j = 1; j < 27; j++) {
-    let rowIndex = 50 + j * 2;
+    let rowIndex = 48 + j * 2;
     let seats = [];
 
     // A/B/C/D
@@ -14,8 +14,11 @@ export function buildDefaultSeats() {
 
       seats.push(seat);
     }
-    defaultSeatsMap.set(rowIndex, seats)
+    defaultSeats.push({
+      seatLen: rowIndex,
+      seatCodes: seats.join(',')
+    })
   }
 
-  return defaultSeatsMap;
+  return defaultSeats;
 }
