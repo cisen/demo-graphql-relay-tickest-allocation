@@ -1,5 +1,5 @@
 {
-    // 使用 IntelliSense 了解相关属性。 
+    // 使用 IntelliSense 了解相关属性。
     // 悬停以查看现有属性的描述。
     // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
@@ -7,8 +7,20 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "启动程序",
-            "program": "${workspaceFolder}\\serverApp.js"
-        }
+            "name": "server",
+            "program": "${workspaceFolder}\\server\\app.js",
+            "cwd": "${workspaceFolder}/server"
+        },
+        {
+          "type": "node",
+          "request": "launch",
+          "name": "web",
+          "runtimeExecutable": "npm",
+          "runtimeArgs": [
+              "run-script", "debug"
+          ],
+          "port": 5858,
+          "cwd": "${workspaceFolder}/web"
+      }
     ]
 }
