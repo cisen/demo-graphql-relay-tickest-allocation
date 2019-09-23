@@ -9,8 +9,8 @@ const typeDefs = `
     pets: [Pet]
     user(id: ID!): User
     users: [User]
-    Seat(id: ID!): Seat
-    Seats: [Seat]
+    seat(id: ID!): Seat
+    seats: [Seat]
   }
 
   type User {
@@ -38,15 +38,15 @@ const resolvers = {
     pets: resolver(models.Pet),
     user: resolver(models.User),
     users: resolver(models.User),
-    Seat: resolver(models.Seat),
-    Seats: resolver(models.Seats),
+    seat: resolver(models.Seat),
+    seats: resolver(models.Seat),
   },
   User: {
     pets: resolver(models.User.Pets),
   },
   Pet: {
     owner: resolver(models.Pet.Owner),
-  },
+  }
 };
 
 // Tell `graphql-sequelize` where to find the DataLoader context in the
