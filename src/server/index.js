@@ -12,8 +12,10 @@ async function start() {
   // Create sample data
   const foo = await models.User.create({ name: 'Foo' });
   const bar = await models.User.create({ name: 'Bar' });
+  const seat = await models.Seat.create({ seatLen:  50 });
   await foo.createPet({ name: 'Bat' });
   await bar.createPet({ name: 'Baz' });
+  await seat.createSeat({ seatLen:  51 });
 
   // Start the GraphQL server
   server.start(() => {

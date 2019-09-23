@@ -4,11 +4,12 @@ import Sequelize from 'sequelize';
 
 import sequelize from '../config/database';
 
+// 格式化数据库
 const db = {
   sequelize,
   Sequelize,
 };
-
+// 利用fs读取所有modeles，不用每个都自己引入
 fs
   .readdirSync(__dirname)
   .filter(file =>
