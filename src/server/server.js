@@ -11,6 +11,8 @@ const typeDefs = `
     users: [User]
     seat(id: ID!): Seat
     seats: [Seat]
+    ticket(id: ID!): Ticket
+    tickets: [Ticket]
   }
 
   type User {
@@ -30,6 +32,12 @@ const typeDefs = `
     seatLen: Int
     seatCodes: String
   }
+
+  type Ticket {
+    id: ID!
+    phone: String
+    seatCodes: String
+  }
 `;
 
 const resolvers = {
@@ -40,6 +48,8 @@ const resolvers = {
     users: resolver(models.User),
     seat: resolver(models.Seat),
     seats: resolver(models.Seat),
+    ticket: resolver(models.Ticket),
+    tickets: resolver(models.Ticket),
   },
   User: {
     pets: resolver(models.User.Pets),
