@@ -27,7 +27,7 @@ const typeDefs = `
 
   type Seat {
     id: ID!
-    seatLen: Boolean
+    seatLen: Int
     seatCodes: String
   }
 `;
