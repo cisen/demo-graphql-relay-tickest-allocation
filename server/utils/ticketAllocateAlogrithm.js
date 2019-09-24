@@ -27,7 +27,9 @@ export function formatSeatsToSeatsMap(seats) {
  *
  * @returns {Array} 随机选中的连续的座位号，也就是最后的结果
  */
-export function getRandomSeat(remainingSeatsMap, applyCount, resSeatCodes = [], dbEffects = []) {
+export function getRandomSeat(remainingSeatsMap, applyCount, dbEffects = []) {
+  // 结果数组
+  let resSeatCodes = [];
   // 随机选中的连续空余座位数量，比如4
   let selectedSeatCount;
   // 空余的连续座位组的第一个位置的集合，比如[AA1, BA1]
@@ -44,12 +46,12 @@ export function getRandomSeat(remainingSeatsMap, applyCount, resSeatCodes = [], 
   // 如果刚好有数量相等的连续空位数的，则直接随机返回一个，特殊处理
   if (remainingSeatsMap.has(applyCount)) {
     remainingSeatCodes = remainingSeatsMap.get(applyCount);
-    selectedSeatCode = remainingSeatCodes[getRandom(remainingSeatCodes.length)];
+    selectedSeatCode = remainingSeatCodes[getRandom(remainingSeatCodes.length - 1)];
     // 该连续长度剩余的座位
     let newRemainSeatsCodes = remainingSeatCodes.filter(code => code !== selectedSeatCode);
 
     // 因为resSeatCodes可能是递归下来的同一个对象，所以需要合并
-    resSeatCodes = resSeatCodes.concat(calcRandomSeats(selectedSeatCode, applyCount, applyCount, remainingSeatsMap, dbEffects));
+    // resSeatCodes = resSeatCodes.concat(calcRandomSeats(selectedSeatCode, applyCount, applyCount, remainingSeatsMap, dbEffects));
 
     return {
       resSeatCodes: calcRandomSeats(selectedSeatCode, applyCount, applyCount, remainingSeatsMap, dbEffects),
@@ -66,17 +68,17 @@ export function getRandomSeat(remainingSeatsMap, applyCount, resSeatCodes = [], 
 
   // 等于的情况上面已经判断，这里判断如果剩余有连续空座位大于申请数量的
   if (remainingSeatsKeysSorted[remainingSeatsKeysSorted.length - 1] > applyCount) {
-    selectedSeatCount = remainingMaxSeatsKeys[getRandom(remainingMaxSeatsKeys.length)];
+    selectedSeatCount = remainingMaxSeatsKeys[getRandom(remainingMaxSeatsKeys.length - 1)];
     remainingSeatCodes = remainingSeatsMap.get(selectedSeatCount);
-    selectedSeatCode = remainingSeatCodes[getRandom(remainingSeatCodes.length)];
+    selectedSeatCode = remainingSeatCodes[getRandom(remainingSeatCodes.length - 1)];
 
-    resSeatCodes = resSeatCodes.concat(calcRandomSeats(
-      selectedSeatCode,
-      selectedSeatCount,
-      applyCount,
-      remainingSeatsMap,
-      dbEffects
-    ));
+    // resSeatCodes = resSeatCodes.concat(calcRandomSeats(
+    //   selectedSeatCode,
+    //   selectedSeatCount,
+    //   applyCount,
+    //   remainingSeatsMap,
+    //   dbEffects
+    // ));
 
     return {
       resSeatCodes: calcRandomSeats(
@@ -95,7 +97,7 @@ export function getRandomSeat(remainingSeatsMap, applyCount, resSeatCodes = [], 
   // 新的给递归的申请长度
   let newApplyCount = applyCount - selectedSeatCount;
   remainingSeatCodes = remainingSeatsMap.get(selectedSeatCount);
-  selectedSeatCode = remainingSeatCodes[getRandom(remainingSeatCodes.length)];
+  selectedSeatCode = remainingSeatCodes[getRandom(remainingSeatCodes.length - 1)];
   // 这里注意，全部分配
   resSeatCodes = calcRandomSeats(
     selectedSeatCode,
@@ -105,7 +107,7 @@ export function getRandomSeat(remainingSeatsMap, applyCount, resSeatCodes = [], 
     dbEffects
   );
   // 递归给剩余的继续申请,这里需要合并分开分配的数组
-  let nextResSeatCodes = getRandomSeat(remainingSeatsMap, newApplyCount, [], dbEffects).resSeatCodes;
+  let nextResSeatCodes = getRandomSeat(remainingSeatsMap, newApplyCount, dbEffects).resSeatCodes;
   return {
     resSeatCodes: resSeatCodes.concat(nextResSeatCodes),
     dbEffects
@@ -134,6 +136,7 @@ function calcRandomSeats(startSeatCode, remainingSeatsCount, applyCount, remaini
   // 随机抽中的座位组的第一个座位编号，比如：AA1
   let selectedColumnCode = columnCode + offset;
   // 该长度座位组去除这个之后，新的剩余座位组
+  console.log('remainingSeatsCount', remainingSeatsCount, applyCount, remainingSeatsMap)
   let newRemainSeatsCodes = remainingSeatsMap.get(remainingSeatsCount).filter(code => code !== startSeatCode);
   // 先生成新的长度，再删除旧的长度
   // 如果左边产生了新的空余

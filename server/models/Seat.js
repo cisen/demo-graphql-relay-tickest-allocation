@@ -11,7 +11,7 @@ class Seat extends Model {
 }
 
 const schema = {
-  seatLen: Sequelize.BOOLEAN,
+  seatLen: { type: Sequelize.BOOLEAN, unique: true},
   seatCodes: Sequelize.STRING
 };
 

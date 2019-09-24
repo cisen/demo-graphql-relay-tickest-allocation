@@ -19,6 +19,7 @@ const serverOpt = {
 async function start() {
   // 每次启动清空数据
   await models.Seat.drop();
+  await models.Ticket.drop();
   // Make sure the database tables are up to date
   await models.sequelize.sync({ force: true });
 

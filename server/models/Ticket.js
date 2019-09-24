@@ -11,8 +11,8 @@ class Ticket extends Model {
 }
 
 const schema = {
-  phone: Sequelize.STRING,
-  seatCodes: Sequelize.STRING
+  phone: { type: Sequelize.STRING, unique: true},
+  seatCodes: { type: Sequelize.STRING, unique: true},
 };
 
 export default (sequelize) => {

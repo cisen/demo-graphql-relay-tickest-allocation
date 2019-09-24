@@ -10,6 +10,7 @@ import renderEmpty from 'antd/lib/config-provider/renderEmpty';
 
 function BuyTickets(props) {
   const [inputPhone, setInputPhone] = useState();
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [inputTicketCout, setInputTicketCout] = useState();
   const [phone, setPhone] = useState();
   const [seatCodes, setSeatCodes] = useState();
@@ -19,11 +20,13 @@ function BuyTickets(props) {
   let getResponse = (response) => {
     console.log(response);
     const { buyTickets: { ticket: { phone, seatCodes }}} = response;
+    setButtonLoading(false);
     setPhone(phone);
     setSeatCodes(seatCodes);
   }
 
   let buyTicket = () => {
+    setButtonLoading(true);
     var res = BuyTicketsMutation.commit(environment, inputPhone, inputTicketCout, getResponse);
     console.log(res);
   }
@@ -33,7 +36,7 @@ function BuyTickets(props) {
       <div className="ticket_buy_input">
         <label>手机号：</label><Input onChange={(e) => setInputPhone(e.currentTarget.value)} />
         <label>购票数量：</label><Input onChange={(e) => setInputTicketCout(e.currentTarget.value)}/>
-        <Button onClick={buyTicket}>提交</Button>
+        <Button loading={buttonLoading} onClick={buyTicket}>提交</Button>
       </div>
       { phone && <p className="ticket_result">
         <span className="">用户 {phone} 买到的票为：</span>
