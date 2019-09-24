@@ -1,5 +1,6 @@
 import React from 'react';
 import {createFragmentContainer, QueryRenderer } from 'react-relay';
+// import { graphql } from 'react-relay'
 import {graphql} from 'babel-plugin-relay/macro';
 import environment from '../environment';
 
@@ -9,9 +10,9 @@ function BuyTickets(props) {
     <QueryRenderer
         environment={environment}
         query={graphql`
-          query UserTodoListQuery($userID: ID!) {
-            node(id: $userID) {
-              id
+          query BuyTicketsQuery($userID: ID!) {
+            seat(id: $userID) {
+              seatLen
             }
           }
         `}
@@ -23,9 +24,10 @@ function BuyTickets(props) {
           if(!props) {
             return <div>Loading...</div>
           }
+          console.log(props);
           return (
             <div>
-              User ID: {props.node.id}
+              User ID: {props.seat.seatLen}
             </div>
           )
         }}

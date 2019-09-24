@@ -1,5 +1,5 @@
 import React from 'react';
-import {createFragmentContainer, graphql } from 'react-relay';
+// import {createFragmentContainer, graphql } from 'react-relay';
 import BuyTickets from './components/BuyTickets';
 import logo from './logo.svg';
 import './App.css';

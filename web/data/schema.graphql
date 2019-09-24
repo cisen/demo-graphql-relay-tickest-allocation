@@ -1,0 +1,34 @@
+ type Query {
+    pet(id: ID!): Pet
+    pets: [Pet]
+    user(id: ID!): User
+    users: [User]
+    seat(id: ID!): Seat
+    seats: [Seat]
+    ticket(id: ID!): Ticket
+    tickets: [Ticket]
+  }
+
+  type User {
+    id: ID!
+    name: String
+    pets: [Pet]
+  }
+
+  type Pet {
+    id: ID!
+    name: String
+    owner: User
+  }
+
+  type Seat {
+    id: ID!
+    seatLen: Int
+    seatCodes: String
+  }
+
+  type Ticket {
+    id: ID!
+    phone: String
+    seatCodes: String
+  }

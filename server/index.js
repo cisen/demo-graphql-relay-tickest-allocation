@@ -2,6 +2,16 @@ import server from './server';
 import models from './models';
 import { buildDefaultSeats } from './utils/buildDefaultSeats';
 
+const serverOpt = {
+  cors: {
+    "origin": "*",
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    "preflightContinue": false,
+    "optionsSuccessStatus": 204
+  },
+  port: 4000,
+}
+
 /**
  * DISCLAIMER: using sequelize#sync is not recommended for production use. Please, please
  * use migrations. This method of creating a database is used in this demo for simplicity's sake.
@@ -22,8 +32,8 @@ async function start() {
   console.log(defaultSeatsMap)
 
   // Start the GraphQL server
-  server.start(() => {
-    console.log('Server is running on localhost:4000');
+  server.start(serverOpt, ({ port }) => {
+    console.log('Server is running on localhost:' + port);
   });
 }
 

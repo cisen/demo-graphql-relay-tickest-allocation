@@ -15,7 +15,7 @@ function fetchQuery(
   operation,
   variables,
 ) {
-  return axios.post('http://localhost:4000/', {
+  return axios.post('http://localhost:4000', {
     query: operation.text,
     variables,
   }).then(response => {
