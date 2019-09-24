@@ -17,6 +17,8 @@ const serverOpt = {
  * use migrations. This method of creating a database is used in this demo for simplicity's sake.
  */
 async function start() {
+  // 每次启动清空数据
+  await models.Seat.drop();
   // Make sure the database tables are up to date
   await models.sequelize.sync({ force: true });
 
@@ -28,7 +30,7 @@ async function start() {
   // await seat.createSeat({ seatLen:  51 });
 
   let defaultSeatsMap = buildDefaultSeats();
-  const seats = await models.Seat.bulkCreate(defaultSeatsMap);
+  await models.Seat.bulkCreate(defaultSeatsMap);
   console.log(defaultSeatsMap)
 
   // Start the GraphQL server
