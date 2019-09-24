@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 969fac41e8bca3e33455f85734ea59bd
+ * @relayHash 3ae911c42695cfbb01f67459b80e746c
  */
 
 /* eslint-disable */
@@ -9,27 +9,27 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type BuyTicketsQueryVariables = {|
-  userID: string
+export type ViewerBuyTicketsQueryVariables = {|
+  phone?: ?number
 |};
-export type BuyTicketsQueryResponse = {|
-  +seat: ?{|
-    +seatLen: ?number
+export type ViewerBuyTicketsQueryResponse = {|
+  +ticket: ?{|
+    +phone: ?string
   |}
 |};
-export type BuyTicketsQuery = {|
-  variables: BuyTicketsQueryVariables,
-  response: BuyTicketsQueryResponse,
+export type ViewerBuyTicketsQuery = {|
+  variables: ViewerBuyTicketsQueryVariables,
+  response: ViewerBuyTicketsQueryResponse,
 |};
 */
 
 
 /*
-query BuyTicketsQuery(
-  $userID: ID!
+query ViewerBuyTicketsQuery(
+  $phone: Int
 ) {
-  seat(id: $userID) {
-    seatLen
+  ticket(phone: $phone) {
+    phone
     id
   }
 }
@@ -39,22 +39,22 @@ const node/*: ConcreteRequest*/ = (function(){
 var v0 = [
   {
     "kind": "LocalArgument",
-    "name": "userID",
-    "type": "ID!",
+    "name": "phone",
+    "type": "Int",
     "defaultValue": null
   }
 ],
 v1 = [
   {
     "kind": "Variable",
-    "name": "id",
-    "variableName": "userID"
+    "name": "phone",
+    "variableName": "phone"
   }
 ],
 v2 = {
   "kind": "ScalarField",
   "alias": null,
-  "name": "seatLen",
+  "name": "phone",
   "args": null,
   "storageKey": null
 };
@@ -62,7 +62,7 @@ return {
   "kind": "Request",
   "fragment": {
     "kind": "Fragment",
-    "name": "BuyTicketsQuery",
+    "name": "ViewerBuyTicketsQuery",
     "type": "Query",
     "metadata": null,
     "argumentDefinitions": (v0/*: any*/),
@@ -70,10 +70,10 @@ return {
       {
         "kind": "LinkedField",
         "alias": null,
-        "name": "seat",
+        "name": "ticket",
         "storageKey": null,
         "args": (v1/*: any*/),
-        "concreteType": "Seat",
+        "concreteType": "Ticket",
         "plural": false,
         "selections": [
           (v2/*: any*/)
@@ -83,16 +83,16 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "BuyTicketsQuery",
+    "name": "ViewerBuyTicketsQuery",
     "argumentDefinitions": (v0/*: any*/),
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
-        "name": "seat",
+        "name": "ticket",
         "storageKey": null,
         "args": (v1/*: any*/),
-        "concreteType": "Seat",
+        "concreteType": "Ticket",
         "plural": false,
         "selections": [
           (v2/*: any*/),
@@ -109,13 +109,13 @@ return {
   },
   "params": {
     "operationKind": "query",
-    "name": "BuyTicketsQuery",
+    "name": "ViewerBuyTicketsQuery",
     "id": null,
-    "text": "query BuyTicketsQuery(\n  $userID: ID!\n) {\n  seat(id: $userID) {\n    seatLen\n    id\n  }\n}\n",
+    "text": "query ViewerBuyTicketsQuery(\n  $phone: Int\n) {\n  ticket(phone: $phone) {\n    phone\n    id\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'ab6fe29c50fb4b2885d60d9df200959f';
+(node/*: any*/).hash = '5be6697585111eab94bdbf9bb8f0e129';
 module.exports = node;

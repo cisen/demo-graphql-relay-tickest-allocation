@@ -7,7 +7,7 @@ const resolvers = {
   },
 }
 
-const logInput = async (resolve, root, args, context, info) => {
+const ticketInput = async (resolve, root, args, context, info) => {
   console.log(`1. logInput: ${JSON.stringify(args)}`)
   const result = await resolve(root, args, context, info)
   console.log(`5. logInput`)
@@ -16,6 +16,9 @@ const logInput = async (resolve, root, args, context, info) => {
 
 export const ticketMiddleware = {
   Query: {
-    seat: logInput,
+    ticket: ticketInput
+  },
+  Mutation: {
+    buyTickets: ticketInput
   }
 }

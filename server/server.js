@@ -12,7 +12,7 @@ type Query {
   users: [User]
   seat(id: ID!): Seat
   seats: [Seat]
-  ticket(id: ID!): Ticket
+  ticket(phone: Int): Ticket
   tickets: [Ticket]
 }
 
@@ -35,7 +35,7 @@ type Seat {
 }
 
 type Ticket {
-  id: ID!
+  id: ID
   phone: String
   seatCodes: String
 }
@@ -52,6 +52,7 @@ type BuyTicketsPayload {
 type Mutation {
   buyTickets(input: BuyTicketsInfo!): BuyTicketsPayload
 }
+
 
 `;
 

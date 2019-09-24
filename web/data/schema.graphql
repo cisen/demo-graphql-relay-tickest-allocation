@@ -5,7 +5,7 @@
     users: [User]
     seat(id: ID!): Seat
     seats: [Seat]
-    ticket(id: ID!): Ticket
+    ticket(phone: Int): Ticket
     tickets: [Ticket]
   }
 
@@ -28,7 +28,7 @@
   }
 
   type Ticket {
-    id: ID!
+    id: ID
     phone: String
     seatCodes: String
   }
