@@ -42,6 +42,10 @@
     ticket: Ticket
   }
 
+  type BuyTicketsRespon {
+    ticket: Ticket
+  }
+
   type Mutation {
     buyTickets(input: BuyTicketsInfo!): BuyTicketsPayload
   }

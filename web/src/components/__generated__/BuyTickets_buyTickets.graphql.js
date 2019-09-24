@@ -12,8 +12,10 @@ import type { FragmentReference } from "relay-runtime";
 declare export opaque type BuyTickets_buyTickets$ref: FragmentReference;
 declare export opaque type BuyTickets_buyTickets$fragmentType: BuyTickets_buyTickets$ref;
 export type BuyTickets_buyTickets = {|
-  +phone: ?string,
-  +seatCodes: ?string,
+  +ticket: ?{|
+    +phone: ?string,
+    +seatCodes: ?string,
+  |},
   +$refType: BuyTickets_buyTickets$ref,
 |};
 export type BuyTickets_buyTickets$data = BuyTickets_buyTickets;
@@ -27,26 +29,37 @@ export type BuyTickets_buyTickets$key = {
 const node/*: ReaderFragment*/ = {
   "kind": "Fragment",
   "name": "BuyTickets_buyTickets",
-  "type": "Ticket",
+  "type": "BuyTicketsPayload",
   "metadata": null,
   "argumentDefinitions": [],
   "selections": [
     {
-      "kind": "ScalarField",
+      "kind": "LinkedField",
       "alias": null,
-      "name": "phone",
+      "name": "ticket",
+      "storageKey": null,
       "args": null,
-      "storageKey": null
-    },
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "name": "seatCodes",
-      "args": null,
-      "storageKey": null
+      "concreteType": "Ticket",
+      "plural": false,
+      "selections": [
+        {
+          "kind": "ScalarField",
+          "alias": null,
+          "name": "phone",
+          "args": null,
+          "storageKey": null
+        },
+        {
+          "kind": "ScalarField",
+          "alias": null,
+          "name": "seatCodes",
+          "args": null,
+          "storageKey": null
+        }
+      ]
     }
   ]
 };
 // prettier-ignore
-(node/*: any*/).hash = 'cf07fbfdbf0904b6b0dfa89a6e487398';
+(node/*: any*/).hash = 'aba000f411866b99f9f2c927e9097b2f';
 module.exports = node;

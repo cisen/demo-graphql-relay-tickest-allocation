@@ -9,21 +9,22 @@ import { graphql } from 'babel-plugin-relay/macro';
 import BuyTickets from './BuyTickets'
 import environment from '../environment'
 
-class ViewerBuyTickets extends Component {
-  render() {
+function ViewerBuyTickets(props) {
+  console.log(props);
   let phone = 1234;
   return (
       <QueryRenderer
         environment={environment}
-        query={graphql`
-          query ViewerBuyTicketsQuery($phone: Int) {
-            ticket(phone: $phone) {
-              phone
-            }
-          }
-        `}
+        // query={graphql`
+        //   query ViewerBuyTicketsQuery($phone: Int) {
+        //     ticket(phone: $phone) {
+        //       phone
+        //     }
+        //   }
+        // `}
         variables={{phone}}
         render={({error, props}) => {
+          console.log('ViewerBuyTickets', props);
           if(error) {
             // return <div>Error!</div>
             return <BuyTickets userID="1" />
@@ -40,7 +41,6 @@ class ViewerBuyTickets extends Component {
         }}
       />
     )
-  }
 }
 
 export default ViewerBuyTickets

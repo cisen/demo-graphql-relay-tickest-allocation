@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createFragmentContainer } from 'react-relay';
 import { Input, Button } from 'antd';
 // import { graphql } from 'react-relay'
@@ -8,51 +8,41 @@ import BuyTicketsMutation from './BuyTicketsMutation';
 import './BuyTickets.css';
 import renderEmpty from 'antd/lib/config-provider/renderEmpty';
 
-class BuyTickets extends React.Component {
-  render() {
-    const { userID, relay } = this.props
+function BuyTickets(props) {
+  const [inputPhone, setInputPhone] = useState();
+  const [inputTicketCout, setInputTicketCout] = useState();
+  const [phone, setPhone] = useState();
+  const [seatCodes, setSeatCodes] = useState();
 
-    let buyTicket = () => {
-      BuyTicketsMutation.commit(environment, 123456, 2);
-    }
+  console.log(inputPhone, inputTicketCout)
 
-    return (
-      <div>
+  let getResponse = (response) => {
+    console.log(response);
+    const { buyTickets: { ticket: { phone, seatCodes }}} = response;
+    setPhone(phone);
+    setSeatCodes(seatCodes);
+  }
+
+  let buyTicket = () => {
+    var res = BuyTicketsMutation.commit(environment, inputPhone, inputTicketCout, getResponse);
+    console.log(res);
+  }
+
+  return (
+    <div>
       <div className="ticket_buy_input">
-        <label>手机号：</label><Input />
-        <label>购票数量：</label><Input />
+        <label>手机号：</label><Input onChange={(e) => setInputPhone(e.currentTarget.value)} />
+        <label>购票数量：</label><Input onChange={(e) => setInputTicketCout(e.currentTarget.value)}/>
         <Button onClick={buyTicket}>提交</Button>
       </div>
-      {/* <QueryRenderer
-          environment={environment}
-          query={graphql`
-            query BuyTicketsQuery($userID: ID!) {
-              seat(id: $userID) {
-                seatLen
-              }
-            }
-          `}
-          variables={{userID}}
-          render={({error, props}) => {
-            if(error) {
-              return <div>Error!</div>
-            }
-            if(!props) {
-              return <div>Loading...</div>
-            }
-            console.log(props);
-            return (
-              <div>
-                User ID: {props.seat.seatLen}
-
-              </div>
-            )
-          }}
-        /> */}
-        </div>
-    );
-  }
+      { phone && <p className="ticket_result">
+        <span className="">用户 {phone} 买到的票为：</span>
+        <span>{seatCodes}</span>
+      </p>}
+    </div>
+  );
 }
+
 
 // export default BuyTickets;
 
@@ -62,9 +52,11 @@ export default createFragmentContainer(
     buyTickets: graphql`
       # As a convention, we name the fragment as
       # '<ComponentFileName>_<propName>'
-      fragment BuyTickets_buyTickets on Ticket {
-        phone
-        seatCodes
+      fragment BuyTickets_buyTickets on BuyTicketsPayload {
+        ticket {
+          phone
+          seatCodes
+        }
       }
     `
   }
