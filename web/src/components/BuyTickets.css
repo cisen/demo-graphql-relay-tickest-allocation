@@ -1,8 +1,14 @@
 .ticket_buy_input {
   text-align: center;
+  word-break: break-all;
 }
 
 .ticket_buy_input input {
   width: auto;
   margin-top: 40px;
+}
+
+.ticket_result {
+  word-break: break-all;
+  text-align: center;
 }
