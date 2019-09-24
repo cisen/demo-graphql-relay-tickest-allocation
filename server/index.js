@@ -21,10 +21,10 @@ async function start() {
   await models.sequelize.sync({ force: true });
 
   // Create sample data
-  const foo = await models.User.create({ name: 'Foo' });
-  const bar = await models.User.create({ name: 'Bar' });
-  await foo.createPet({ name: 'Bat' });
-  await bar.createPet({ name: 'Baz' });
+  // const foo = await models.User.create({ name: 'Foo' });
+  // const bar = await models.User.create({ name: 'Bar' });
+  // await foo.createPet({ name: 'Bat' });
+  // await bar.createPet({ name: 'Baz' });
   // await seat.createSeat({ seatLen:  51 });
 
   let defaultSeatsMap = buildDefaultSeats();

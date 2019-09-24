@@ -32,3 +32,16 @@
     phone: String
     seatCodes: String
   }
+
+  input BuyTicketsInfo {
+    phone: String
+    ticketsCout: Int
+  }
+
+  type BuyTicketsPayload {
+    ticket: Ticket
+  }
+
+  type Mutation {
+    buyTickets(input: BuyTicketsInfo!): BuyTicketsPayload
+  }
