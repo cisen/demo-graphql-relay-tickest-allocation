@@ -1,3 +1,37 @@
+/**
+ * 算法说明
+ * - 输入变量：座位的Map对象（remainingSeatsMap）和用户购买的票数（applyCount）
+ * - 返回值：分配给用户的座位号编码数组，数据库操作副作用
+ *
+ * - 座位Map对象结构说明
+ * - - key，是空余的连续座位数量，是length。比如一开始值是50，52...100
+ * - - value, 是以每一组空余连续座位的第一个座位编码为单元的数组，比如，初始化时是：[AA1, BA1, CA1, DA1]
+ * - - k-v, 总结就是：50 -> [AA1, BA1, CA1, DA1]
+ *
+ * - 主要逻辑：
+ * - 如果刚好有剩余连续座位数**等于**申请座位数（随机分配有同等数量的连续座位号）
+ * - - 随机从该key对应的value中，选择一个座位编码
+ * - - 根据申请座位数和第一个座位编码，生成分配结果座位编码
+ * - - 从座位Map对应的key中删除该选中的座位编码，将分配结果和数据库操作返回
+ * - 否则，如果有剩余连续座位数**大于**申请座位数（从大于的里面随机抽取分配给申请数）
+ * - - 将所有大于申请座位数的key都插入数组，然后从该数组中随机抽取一个key
+ * - - 再随机从该key对应的value中，选择一个座位编码
+ * - - 根据选择的座位编码，然后用申请座位数去随机截取一段连续的座位号，如果产生左边或右边新连续座位号，则更新到Map中
+ * - - 根据申请座位数和截取到的第一个座位编码，生成分配结果座位编码
+ * - - 从座位Map对应的key中删除该选中的座位编码，将分配结果和数据库操作返回
+* - 否则，如果有剩余连续座位数**小于**申请座位数（排序，优先分配剩余大的给申请数，递归分配）
+ * - - 将key都插入数组，然后排序
+ * - - 递归开始，在最大的key对应的value中，随机选择一个座位编码
+ * - - 根据选择的座位编码和剩余长度，生成一段连续座位号，返回现在分配结合递归结果的结果
+ * - - 从座位Map对应的key中删除该选中的座位编码，将分配结果和数据库操作返回
+ * - - 递归上面的分配
+ *
+ * - 技巧
+ * - - 利用引用数据，在各个函数执行域存储数据库副作用dbEffects，操作全局座位Map对象
+ *
+ */
+
+
 import { getRandom } from './utils';
 
 /**
@@ -6,6 +40,7 @@ import { getRandom } from './utils';
  * @param seats<Tickets> 存储在数据库的seatLen, seatCodes数组
  *
  * @returns {Map} 以空余连续座位数量为key，各个空余座位组的第一个座位编号数组字符串为value的map对象
+ *
  */
 export function formatSeatsToSeatsMap(seats) {
   let seatsMap = new Map();
@@ -25,7 +60,8 @@ export function formatSeatsToSeatsMap(seats) {
  * @param resSeatCodes 结果座位编码
  * @param dbEffects 对数据库操作的副作用, tag：update, create, del;
  *
- * @returns {Array} 随机选中的连续的座位号，也就是最后的结果
+ * @returns {{Array, Array}} 随机选中的连续的座位号，也就是最后的结果
+ *
  */
 export function getRandomSeat(remainingSeatsMap, applyCount, dbEffects = []) {
   // 结果数组
@@ -123,6 +159,7 @@ export function getRandomSeat(remainingSeatsMap, applyCount, dbEffects = []) {
  * @param applyCount 用户申请的座位数量
  *
  * @returns {Array} 随机选中的连续的座位号，也就是最后的结果
+ *
  */
 function calcRandomSeats(startSeatCode, remainingSeatsCount, applyCount, remainingSeatsMap, dbEffects) {
   let resSeatCodes = [];
@@ -180,7 +217,6 @@ function calcRandomSeats(startSeatCode, remainingSeatsCount, applyCount, remaini
  * @param seatsLen 需要更新的座位数量的编码数组key
  * @param newRemainSeatsCodes 新的剩余连续空余座位数组，比如[AA1, AD2]
  *
- * @returns {Array}
  */
 function updateDBEffectAndMap(remainingSeatsMap, dbEffects, seatsLen, newRemainSeatsCodes) {
   // 如果该长度没有剩余了, 则删除这个key

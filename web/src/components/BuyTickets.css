@@ -1,14 +1,28 @@
-.ticket_buy_input {
+.form {
   text-align: center;
   word-break: break-all;
 }
 
-.ticket_buy_input input {
+.form > input {
   width: auto;
   margin-top: 40px;
 }
 
-.ticket_result {
+.form > label {
+  margin-left: 10px;
+}
+
+.form .ant-btn {
+  margin-left: 10px;
+}
+
+.tips {
+  color: red;
+  text-align: center;
+}
+
+.result {
   word-break: break-all;
   text-align: center;
+  margin-top: 20px;
 }

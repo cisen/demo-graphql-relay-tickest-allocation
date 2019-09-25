@@ -12,29 +12,16 @@ const serverOpt = {
   port: 4000,
 }
 
-/**
- * DISCLAIMER: using sequelize#sync is not recommended for production use. Please, please
- * use migrations. This method of creating a database is used in this demo for simplicity's sake.
- */
 async function start() {
   // 每次启动清空数据
   await models.Seat.drop();
   await models.Ticket.drop();
-  // Make sure the database tables are up to date
+  // 每次启动确认数据库表已同步
   await models.sequelize.sync({ force: true });
-
-  // Create sample data
-  // const foo = await models.User.create({ name: 'Foo' });
-  // const bar = await models.User.create({ name: 'Bar' });
-  // await foo.createPet({ name: 'Bat' });
-  // await bar.createPet({ name: 'Baz' });
-  // await seat.createSeat({ seatLen:  51 });
 
   let defaultSeatsMap = buildDefaultSeats();
   await models.Seat.bulkCreate(defaultSeatsMap);
-  console.log(defaultSeatsMap)
 
-  // Start the GraphQL server
   server.start(serverOpt, ({ port }) => {
     console.log('Server is running on localhost:' + port);
   });

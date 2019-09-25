@@ -1,51 +1,31 @@
- type Query {
-    pet(id: ID!): Pet
-    pets: [Pet]
-    user(id: ID!): User
-    users: [User]
-    seat(id: ID!): Seat
-    seats: [Seat]
-    ticket(phone: Int): Ticket
-    tickets: [Ticket]
-  }
+type Query {
+  seat(id: ID!): Seat
+  seats: [Seat]
+  ticket(phone: Int): Ticket
+  tickets: [Ticket]
+}
 
-  type User {
-    id: ID!
-    name: String
-    pets: [Pet]
-  }
+type Seat {
+  id: ID!
+  seatLen: Int
+  seatCodes: String
+}
 
-  type Pet {
-    id: ID!
-    name: String
-    owner: User
-  }
+type Ticket {
+  id: ID
+  phone: String
+  seatCodes: String
+}
 
-  type Seat {
-    id: ID!
-    seatLen: Int
-    seatCodes: String
-  }
+input BuyTicketsInfo {
+  phone: String
+  ticketsCout: Int
+}
 
-  type Ticket {
-    id: ID
-    phone: String
-    seatCodes: String
-  }
+type BuyTicketsPayload {
+  ticket: Ticket
+}
 
-  input BuyTicketsInfo {
-    phone: String
-    ticketsCout: Int
-  }
-
-  type BuyTicketsPayload {
-    ticket: Ticket
-  }
-
-  type BuyTicketsRespon {
-    ticket: Ticket
-  }
-
-  type Mutation {
-    buyTickets(input: BuyTicketsInfo!): BuyTicketsPayload
-  }
+type Mutation {
+  buyTickets(input: BuyTicketsInfo!): BuyTicketsPayload
+}

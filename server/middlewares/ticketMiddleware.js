@@ -1,30 +1,36 @@
 import models from '../models';
 import { formatSeatsToSeatsMap, getRandomSeat } from '../utils/ticketAllocateAlogrithm';
 
-const resolvers = {
-  Query: {
-    seat: (root, args, context, info) => {
-      console.log(`3. resolver: hello`)
-      return `Hello ${args.name ? args.name : 'world'}!`
-    }
-  },
-}
-
 const ticketInput = async (resolve, root, args, context, info) => {
   const { input: { phone, ticketsCout } } = args;
 
-  const allRemainingSeats = await models.Seat.findAll();
-  const allRemainingSeatsMap = formatSeatsToSeatsMap(allRemainingSeats);
-  const { resSeatCodes, dbEffects } = getRandomSeat(allRemainingSeatsMap, ticketsCout);
-  const resSeatCodesStr = resSeatCodes.join(',');
-
-  await models.Ticket.findOrCreate({
+  const uerHasBuyTickets = await models.Ticket.findOne({
     where: {
       phone
-    },
-    defaults: { phone, seatCodes: resSeatCodesStr }
-  });
+    }
+  })
+  // 如果已经存储，则直接返回
+  if (uerHasBuyTickets) {
+    const resData = {
+      ticket: {
+        phone,
+        seatCodes: uerHasBuyTickets.seatCodes
+      }
+    }
+    await resolve(root, resData, context, info)
+    return resData
+  }
 
+  // 如果不存在则需要分配座位和更新数据库
+  // 读取所有空余座位数量，然后转化为map对象
+  const allRemainingSeats = await models.Seat.findAll();
+  const allRemainingSeatsMap = formatSeatsToSeatsMap(allRemainingSeats);
+  // 关键！根据map对象数据和申请数量计算出座位号
+  const { resSeatCodes, dbEffects } = getRandomSeat(allRemainingSeatsMap, ticketsCout);
+  const resSeatCodesStr = resSeatCodes.join(',');
+  // 创建用户订票数据
+  await models.Ticket.create({ phone, seatCodes: resSeatCodesStr });
+  // 同步剩余座位数据
   for (var i = 0; i < dbEffects.length; i++) {
     let item = dbEffects[i];
     switch (item.tag) {
@@ -38,10 +44,6 @@ const ticketInput = async (resolve, root, args, context, info) => {
           { seatLen: item.seatLen, seatCodes: item.seatCodes },
           {fields: ['seatLen', 'seatCodes']}
         );
-        // await models.Seat.upsert(
-        //   { seatCodes: item.seatCodes },
-        //   {where: { seatLen: item.seatLen }}
-        // );
         break;
       case 'create':
         await models.Seat.create(
@@ -53,20 +55,14 @@ const ticketInput = async (resolve, root, args, context, info) => {
     }
   }
 
-  // const tickets = await models.Ticket.create({
-  //   phone,
-  //   seatCodes: "AA1"
-  // });
-  const res = {
+  const resData = {
     ticket: {
       phone,
-      seatCodes: resSeatCodes.join(',')
+      seatCodes: resSeatCodesStr
     }
   }
-  console.log(`1. logInput: ${JSON.stringify(args)}`)
-  const result = await resolve(root, res, context, info)
-  console.log(`5. logInput`)
-  return res
+  await resolve(root, resData, context, info)
+  return resData
 }
 
 export const ticketMiddleware = {
