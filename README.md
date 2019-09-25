@@ -10,8 +10,6 @@ npm start
 ```sh
 cd web
 npm i
-# 注意！这里要先检查生成graphql的schema
-npm run relay
 npm start
 ```
 
@@ -20,4 +18,4 @@ npm start
 - [x] 系统随机为用户分配座位
 - [x] 用户单次购买多张票时，尽量分配连续的座位
 - [x] 票编码：区号字母+行号字母+列号数字   例:  AE34, AZ100
-- [x] 使用 sqlite 做数据库， Sequelize 操作数据库，graphQl 作前后端接口格式，relay 管理前端数据
+- [x] 使用 sqlite 做数据库， Sequelize 操作数据库，graphQl 作前后端接口格式，apollo 管理前端数据和请求
