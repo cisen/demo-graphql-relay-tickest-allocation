@@ -1,5 +1,5 @@
 import models from '../models';
-import { formatSeatsToSeatsMap, getRandomSeat } from '../utils/ticketAllocateAlogrithm';
+import { formatSeatsToSeatsMap, getRandomSeat } from '../utils/ticketAllocate';
 
 const ticketInput = async (resolve, root, args, context, info) => {
   const { input: { phone, ticketsCout } } = args;
@@ -9,7 +9,7 @@ const ticketInput = async (resolve, root, args, context, info) => {
       phone
     }
   })
-  // 如果已经存储，则直接返回
+  // 如果已经存在，则直接返回
   if (uerHasBuyTickets) {
     const resData = {
       ticket: {
@@ -30,7 +30,7 @@ const ticketInput = async (resolve, root, args, context, info) => {
   const resSeatCodesStr = resSeatCodes.join(',');
   // 创建用户订票数据
   await models.Ticket.create({ phone, seatCodes: resSeatCodesStr });
-  // 同步剩余座位数据
+  // 同步剩余座位数据到数据库
   for (var i = 0; i < dbEffects.length; i++) {
     let item = dbEffects[i];
     switch (item.tag) {

@@ -1,6 +1,6 @@
 import server from './server';
 import models from './models';
-import { buildDefaultSeats } from './utils/buildDefaultSeats';
+import { buildDefaultSeats } from './utils/ticketAllocate';
 
 const serverOpt = {
   cors: {

@@ -31,13 +31,43 @@
  *
  */
 
+import { getRandom, decoABC, encoABC } from './utils';
 
-import { getRandom } from './utils';
+/**
+ * 生成默认座位数据，如[{seatLen: 50, seatCodes: 'AY23'}, ...]
+ * 50为剩余连续座位数
+ * 座位编码第一个字母如A为区域，第二个如Y为行编码，后面数字为列编码
+ *
+ * @returns {Array} 以空余连续座位数量为key，各个空余座位组的第一个座位编号数组字符串为value的map对象
+ *
+ */
+export function buildDefaultSeats() {
+  let defaultSeats = [];
+
+  // 50-100
+  for (let j = 1; j < 27; j++) {
+    let rowIndex = 48 + j * 2;
+    let seats = [];
+
+    // A/B/C/D
+    for (let i = 1; i < 5; i++) {
+      let seat = `${encoABC(i)}${encoABC(j)}1`
+
+      seats.push(seat);
+    }
+    defaultSeats.push({
+      seatLen: rowIndex,
+      seatCodes: seats.join(',')
+    })
+  }
+
+  return defaultSeats;
+}
 
 /**
  * 随机从连续座位中抽取连续的座位
  *
- * @param seats<Tickets> 存储在数据库的seatLen, seatCodes数组
+ * @param seats<Tickets> 存储在数据库的seatLen, seatCodes数组。第一次是buildDefaultSeats的返回结果
  *
  * @returns {Map} 以空余连续座位数量为key，各个空余座位组的第一个座位编号数组字符串为value的map对象
  *
@@ -85,9 +115,6 @@ export function getRandomSeat(remainingSeatsMap, applyCount, dbEffects = []) {
     selectedSeatCode = remainingSeatCodes[getRandom(remainingSeatCodes.length - 1)];
     // 该连续长度剩余的座位
     let newRemainSeatsCodes = remainingSeatCodes.filter(code => code !== selectedSeatCode);
-
-    // 因为resSeatCodes可能是递归下来的同一个对象，所以需要合并
-    // resSeatCodes = resSeatCodes.concat(calcRandomSeats(selectedSeatCode, applyCount, applyCount, remainingSeatsMap, dbEffects));
 
     return {
       resSeatCodes: calcRandomSeats(selectedSeatCode, applyCount, applyCount, remainingSeatsMap, dbEffects),
@@ -173,7 +200,6 @@ function calcRandomSeats(startSeatCode, remainingSeatsCount, applyCount, remaini
   // 随机抽中的座位组的第一个座位编号，比如：AA1
   let selectedColumnCode = columnCode + offset;
   // 该长度座位组去除这个之后，新的剩余座位组
-  console.log('remainingSeatsCount', remainingSeatsCount, applyCount, remainingSeatsMap)
   let newRemainSeatsCodes = remainingSeatsMap.get(remainingSeatsCount).filter(code => code !== startSeatCode);
   // 先生成新的长度，再删除旧的长度
   // 如果左边产生了新的空余

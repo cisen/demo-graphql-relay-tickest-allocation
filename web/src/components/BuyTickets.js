@@ -47,7 +47,7 @@ export default function BuyTickets() {
         <label>手机号：</label>
         <Input onChange={phoneInput} onBlur={phoneInputVerify} />
         <label>购票数量：</label>
-        <InputNumber onChange={(value) => setInputTicketCout(value)} max={5} min={0} />
+        <InputNumber onChange={(value) => setInputTicketCout(value)} max={5} min={1} />
         <Button loading={buttonLoading} onClick={submit}>提交</Button>
       </div>
       {
