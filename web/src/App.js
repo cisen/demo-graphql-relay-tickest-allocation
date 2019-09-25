@@ -1,11 +1,14 @@
 import React from 'react';
-import ViewerBuyTickets from './components/ViewerBuyTickets';
+import BuyTickets from './components/BuyTickets';
 import './App.css';
 
-function App() {
+function App(props) {
+  const { apolloClient } = props;
+
+  console.log(apolloClient);
   return (
     <div className="App">
-      <ViewerBuyTickets />
+      <BuyTickets apolloClient={apolloClient} />
     </div>
   );
 }
