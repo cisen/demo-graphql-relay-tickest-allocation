@@ -1,73 +1,23 @@
-# `graphql-sequelize` + `graphql-yoga`
-
-An example of how to set up `graphql-sequelize` and `dataloader-sequelize` with `graphql-yoga`.
-
-## Prerequisites
-
-- Node 8+
-
-```bash
-npm install
+# 使用
+## 启动数据库服务器
+```sh
+cd server
+npm i
 npm start
-open http://localhost:4000
 ```
 
-## Running a query
-
-In GraphQL Playground, run the following query:
-
-```graphql
-{
-  pets {
-    name
-
-    owner {
-      id
-      name
-    }
-  }
-}
+## 启动静态服务器
+```sh
+cd web
+npm i
+# 注意！这里要先检查生成graphql的schema
+npm run relay
+npm start
 ```
 
-Your response should look like this:
-
-```json
-{
-  "data": {
-    "pets": [
-      {
-        "name": "Bat",
-        "owner": {
-          "id": "1",
-          "name": "Foo"
-        }
-      },
-      {
-        "name": "Baz",
-        "owner": {
-          "id": "2",
-          "name": "Bar"
-        }
-      }
-    ]
-  }
-}
-```
-
-To verify that DataLoader is working as expected, look at your server output. You should see two
-queries:
-
-```bash
-Executing (default): SELECT `id`, `name`, `ownerId`, `createdAt`, `updatedAt` FROM `pets` AS `Pet` ORDER BY `Pet`.`id` ASC;
-Executing (default): SELECT `id`, `name`, `createdAt`, `updatedAt` FROM `users` AS `User` WHERE `User`.`id` IN (1, 2);
-```
-
-For comparison, open [src/server.js](./src/server.js) and comment out the entirety of the
-`context` option that gets passed into `GraphQLServer`. Restart the server, run the
-GraphQL query again, and check the server output. Now, you should see three queries:
-
-```bash
-Executing (default): SELECT `id`, `name`, `ownerId`, `createdAt`, `updatedAt` FROM `pets` AS `Pet` ORDER BY `Pet`.`id` ASC;
-Executing (default): SELECT `id`, `name`, `createdAt`, `updatedAt` FROM `users` AS `User` WHERE `User`.`id` = 1;
-Executing (default): SELECT `id`, `name`, `createdAt`, `updatedAt` FROM `users` AS `User` WHERE `User`.`id` = 2;
-```
+# 功能
+- [x] 用户一次性可购买1-5张票
+- [x] 系统随机为用户分配座位
+- [x] 用户单次购买多张票时，尽量分配连续的座位
+- [x] 票编码：区号字母+行号字母+列号数字   例:  AE34, AZ100
+- [x] 使用 sqlite 做数据库， Sequelize 操作数据库，graphQl 作前后端接口格式，relay 管理前端数据

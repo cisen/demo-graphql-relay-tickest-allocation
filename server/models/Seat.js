@@ -3,11 +3,6 @@ import Sequelize, { Model } from 'sequelize';
 class Seat extends Model {
   static tableName = 'seats';
 
-  // static associate(models) {
-  //   User.Pets = User.hasMany(models.Pet, {
-  //     foreignKey: 'ownerId',
-  //   });
-  // }
 }
 
 const schema = {
